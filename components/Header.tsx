@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface HeaderProps {
@@ -22,22 +21,19 @@ const Header: React.FC<HeaderProps> = ({ activeTab }) => {
   };
 
   return (
-    <header className="bg-white border-b border-slate-200 px-10 py-6 flex justify-between items-center">
+    <header className="bg-[#F9F7F5] border-b border-slate-200 px-12 py-8 flex justify-between items-end">
       <div>
-        <h1 className="text-xl font-black text-slate-900 tracking-tighter uppercase">{getTitle()}</h1>
-        <div className="flex items-center space-x-4 mt-1">
-          <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Protocol v3.1-STABLE</span>
-          <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
-          <div className="flex items-center space-x-1">
-            <div className="w-2 h-2 rounded-full bg-green-500"></div>
-            <span className="text-[9px] font-bold text-slate-500 uppercase">Edge Nodes Active: Global Consensus</span>
-          </div>
+        <h1 className="text-3xl font-serif font-black text-slate-900 tracking-tight">{getTitle()}</h1>
+        <div className="flex items-center space-x-4 mt-2">
+          <span className="px-2 py-0.5 bg-slate-900 text-white text-[9px] font-black uppercase tracking-widest">Confidential</span>
+          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Not for Distribution</span>
         </div>
       </div>
-      <div className="flex flex-col items-end">
-        <span className="text-[9px] font-mono text-slate-400 font-bold uppercase mt-1 tracking-tight">
-          {new Date().toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: '2-digit' })}
-        </span>
+      <div className="text-right hidden md:block">
+        <div className="text-[10px] font-black uppercase tracking-widest text-slate-400">Reporting Period</div>
+        <div className="text-sm font-serif font-bold text-slate-900 mt-1">
+          {new Date().toLocaleDateString('en-CA', { month: 'long', year: 'numeric' })}
+        </div>
       </div>
     </header>
   );

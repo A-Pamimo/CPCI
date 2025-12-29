@@ -33,7 +33,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-slate-50 font-sans selection:bg-red-100 selection:text-red-900">
+    <div className="min-h-screen flex flex-col md:flex-row bg-[#F9F7F5] font-sans selection:bg-red-200 selection:text-red-900 text-slate-900">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header activeTab={activeTab} />
