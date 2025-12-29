@@ -51,7 +51,7 @@ const Dashboard: React.FC = () => {
       <section className="bg-white border border-slate-200 p-8 grid grid-cols-1 md:grid-cols-4 gap-12 relative overflow-hidden">
         <div className="md:col-span-1 space-y-6">
           <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Regional Audit</h3>
-          <select 
+          <select
             value={selectedProvince}
             onChange={(e) => setSelectedProvince(e.target.value as Province)}
             className="w-full bg-slate-50 border border-slate-200 px-3 py-2 text-[11px] font-black uppercase tracking-widest focus:outline-none focus:border-slate-400"
@@ -83,8 +83,8 @@ const Dashboard: React.FC = () => {
                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">{m.label}</p>
                 <p className={`text-3xl font-bold ${mSig.color} tabular-nums`}>{m.value}</p>
                 <div className="flex items-center space-x-1 mt-2">
-                   <div className={`w-1.5 h-1.5 rounded-full ${mSig.bg.split(' ')[0]} border border-current`}></div>
-                   <p className="text-[9px] font-medium text-slate-500 uppercase tracking-tight">{m.detail}</p>
+                  <div className={`w-1.5 h-1.5 rounded-full ${mSig.bg.split(' ')[0]} border border-current`}></div>
+                  <p className="text-[9px] font-medium text-slate-500 uppercase tracking-tight">{m.detail}</p>
                 </div>
               </div>
             );
@@ -103,7 +103,7 @@ const Dashboard: React.FC = () => {
             </p>
           </div>
         </div>
-        <button 
+        <button
           onClick={handlePredictiveAudit}
           disabled={isPredicting}
           className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-[9px] font-black uppercase tracking-widest transition-all disabled:opacity-50"
@@ -117,21 +117,21 @@ const Dashboard: React.FC = () => {
         <div className="flex justify-between items-end mb-10 border-b border-slate-50 pb-6">
           <div>
             <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Fig 1. Longitudinal Divergence</h3>
-            <p className="text-[10px] text-slate-500 mt-2 uppercase font-bold tracking-tight">Shaded regions indicate systemic instability thresholds (Critical > 5.0%)</p>
+            <p className="text-[10px] text-slate-500 mt-2 uppercase font-bold tracking-tight">Shaded regions indicate systemic instability thresholds (Critical &gt; 5.0%)</p>
           </div>
           <div className="flex space-x-4">
-             <div className="flex items-center space-x-1"><div className="w-2 h-2 bg-slate-300"></div><span className="text-[8px] font-bold text-slate-400 uppercase">CPI (StatCan)</span></div>
-             <div className="flex items-center space-x-1"><div className="w-2 h-2 bg-red-700"></div><span className="text-[8px] font-bold text-slate-400 uppercase">CPCI (Synthetic)</span></div>
+            <div className="flex items-center space-x-1"><div className="w-2 h-2 bg-slate-300"></div><span className="text-[8px] font-bold text-slate-400 uppercase">CPI (StatCan)</span></div>
+            <div className="flex items-center space-x-1"><div className="w-2 h-2 bg-red-700"></div><span className="text-[8px] font-bold text-slate-400 uppercase">CPCI (Synthetic)</span></div>
           </div>
         </div>
-        
+
         <div className="h-80 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={HISTORICAL_DATA}>
               <CartesianGrid strokeDasharray="1 4" vertical={false} stroke="#f1f5f9" />
-              <XAxis dataKey="month" stroke="#94a3b8" fontSize={9} tickLine={false} axisLine={false} tick={{fontWeight: 600}} />
-              <YAxis stroke="#94a3b8" fontSize={9} tickLine={false} axisLine={false} unit="%" tick={{fontWeight: 600}} />
-              <Tooltip 
+              <XAxis dataKey="month" stroke="#94a3b8" fontSize={9} tickLine={false} axisLine={false} tick={{ fontWeight: 600 }} />
+              <YAxis stroke="#94a3b8" fontSize={9} tickLine={false} axisLine={false} unit="%" tick={{ fontWeight: 600 }} />
+              <Tooltip
                 contentStyle={{ border: 'none', backgroundColor: '#0f172a', color: '#fff', borderRadius: '0px', fontSize: '10px', fontWeight: 'bold' }}
                 itemStyle={{ color: '#fff' }}
               />
@@ -144,19 +144,19 @@ const Dashboard: React.FC = () => {
 
         {/* Data Source Footer */}
         <div className="mt-8 pt-6 border-t border-slate-50 flex flex-col md:flex-row items-center justify-between gap-4">
-           <div className="flex items-center space-x-2">
-             <div className="w-2 h-2 bg-slate-200"></div>
-             <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Primary Data Source:</span>
-             <a 
-               href={DATA_SOURCES.CPI_BASE.url} 
-               target="_blank" 
-               rel="noopener noreferrer" 
-               className="text-[9px] font-bold text-blue-600 hover:text-blue-800 uppercase underline decoration-dotted transition-colors"
-             >
-               {DATA_SOURCES.CPI_BASE.name} &rarr;
-             </a>
-           </div>
-           <span className="text-[8px] font-mono text-slate-300">VALID_THRU: SEPT_2024</span>
+          <div className="flex items-center space-x-2">
+            <div className="w-2 h-2 bg-slate-200"></div>
+            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Primary Data Source:</span>
+            <a
+              href={DATA_SOURCES.CPI_BASE.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[9px] font-bold text-blue-600 hover:text-blue-800 uppercase underline decoration-dotted transition-colors"
+            >
+              {DATA_SOURCES.CPI_BASE.name} &rarr;
+            </a>
+          </div>
+          <span className="text-[8px] font-mono text-slate-300">VALID_THRU: SEPT_2024</span>
         </div>
       </section>
 
