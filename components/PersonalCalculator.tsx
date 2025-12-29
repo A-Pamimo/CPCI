@@ -87,7 +87,7 @@ const PersonalCalculator: React.FC = () => {
       <section className="bg-white border-t-4 border-slate-900 p-8 shadow-sm space-y-4">
         <h2 className="text-xs font-black text-slate-900 uppercase tracking-[0.3em] font-serif">Micro-Economic Simulation</h2>
         <p className="text-sm font-serif text-slate-700 leading-relaxed">
-          Standard inflation measures assume a "Representative Agent" with a fixed basket. This module calculates the <strong>Idiosyncratic Friction Rate</strong> for specific demographic archetypes. By weighting high-frequency non-durable goods ($\phi$) and inelastic housing costs ($M_{loc}$), we model the "Perceived Inflation" actually experienced by these agents.
+          Standard inflation measures assume a "Representative Agent" with a fixed basket. This module calculates the <strong>Idiosyncratic Friction Rate</strong> for specific demographic archetypes. By weighting high-frequency non-durable goods (φ) and inelastic housing costs (M<sub>loc</sub>), we model the "Perceived Inflation" actually experienced by these agents.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
           <div className="p-4 bg-[#F9F7F5] border border-slate-200">
@@ -97,7 +97,7 @@ const PersonalCalculator: React.FC = () => {
             </p>
           </div>
           <div className="p-4 bg-[#F9F7F5] border border-slate-200">
-            <h4 className="text-[10px] font-black text-slate-900 uppercase mb-1">Regional Friction ($M_{loc}$)</h4>
+            <h4 className="text-[10px] font-black text-slate-900 uppercase mb-1">Regional Friction (M<sub>loc</sub>)</h4>
             <p className="text-[10px] text-slate-500 leading-relaxed font-sans">
               Substitution elasticity constraints. Agents in inelastic housing markets face higher effective inflation due to inability to substitute.
             </p>

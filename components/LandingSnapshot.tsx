@@ -166,7 +166,7 @@ const LandingSnapshot: React.FC = () => {
         {/* Regional Coefficient Distribution */}
         <div className="space-y-6">
           <div className="border-b-2 border-slate-900 pb-2">
-            <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest font-serif">Regional Friction ($M_{loc}$)</h4>
+            <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest font-serif">Regional Friction (M<sub>loc</sub>)</h4>
           </div>
           <div className="grid grid-cols-1 gap-1">
             {regionalSorted.map(([province, value]) => (
