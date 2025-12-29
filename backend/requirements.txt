@@ -1,0 +1,5 @@
+FASTAPI
+uvicorn
+pandas
+numpy
+pydantic
