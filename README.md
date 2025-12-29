@@ -16,30 +16,40 @@ The infrastructure is built to reconcile "Headline Inflation" with "Perceived Fr
 
 ## 📐 Governing Mathematical Models
 
-The CPCI is not a subjective metric; it is grounded in deterministic mathematical frameworks detailed in **Section 07: Technical Notes**.
+The CPCI utilizes a **stochastic behavioral model** grounded in recent econometric literature (ECB, NBER). It rejects the "Representative Agent" hypothesis in favor of a frequency-weighted perception model.
 
-### 1. The Primary CPCI Equation
-The index is calculated by summing price relatives across $k$ categories, adjusted by velocity and inelasticity coefficients:
-`CPCI_t = Σ [ (P_kt / P_k0) × W_k × (V_k / 10) × E_k ] + S_t + ML_adj`
+### 1. The Perceived Cost Index ($CPCI_t$)
+The index is calculated using a **Frequency-Weighted** aggregation model with a **Shrinkflation Utility Penalty**:
 
-### 2. Regional Variance Modeling (R_c)
-Regional stress is derived through a jurisdictional variance coefficient:
-`R_c = (Tax_p + Fuel_c + Util_r) × Density_i`
-*   **Tax_p**: Provincial sales tax friction.
-*   **Fuel_c**: Regional carbon adjustment coefficients.
-*   **Util_r**: Regulatory utility pricing weight.
-*   **Density_i**: Housing density inelasticity factor.
+$$CPCI_{t} = \sum_{i} \left[ \left( \alpha \phi_i + (1-\alpha)\theta_i \right) \cdot (1 + \lambda \mathbb{I}_{shrink}) \cdot \frac{P_{i,t}}{P_{i,t-1}} \right] \cdot M_{loc}$$
 
-### 3. The "Friction Cliff" Forecaster
-A non-linear trend extrapolation model that identifies the point of systemic breakage in household purchasing power by measuring the acceleration of the Divergence Spread.
+*   **$\alpha \approx 0.44$ (Frequency Bias Parameter)**: Derived from *Georganas, Healy, and Li (2014)*. Captures the cognitive overweighting of high-frequency purchases (e.g., fuel, milk).
+*   **$\lambda$ (Utility Discontinuity)**: A penalty parameter applied when unit-volumes decrease ("Shrinkflation"), correcting for the cognitive search cost and utility loss not captured by standard unit-value adjustments (*Rojas et al., 2024*).
+*   **$M_{loc}$ (Regional Friction)**: A spatial multiplier derived from **Housing Supply Elasticity** constraints (*Glaeser & Gyourko*), rather than simple population density.
 
-## 🛡 Security & Compliance (SOC 2 Readiness)
+### 2. Stochastic Policy Inference
+Unlike deterministic models, the CPCI uses a probabilistic "Friction Cliff" forecaster to estimate the tipping point where "Felt Inflation" triggers systemic wage-price spirals.
 
+## 🐍 Python Econometric Engine (`backend/`)
+
+While the interface is built in React for accessibility, the core econometric modeling is isolated in a rigorous **Python** environment for academic auditing.
+
+*   `backend/econometrics.py`: The core logic engine implementing the validated $CPCI_t$ formula.
+*   `backend/main.py`: A **FastAPI** interface exposing the model for real-time analysis.
+
+Run the engine locally:
+```bash
+cd backend
+pip install -r requirements.txt
+python -m uvicorn main:app --reload
+```
+
+## 🛡 Verifiable Data Provenance
 To ensure institutional trust, the platform implements:
 
-1.  **Identity Vault**: All data commits are gated by a Zero-Trust identity handshake (Peer IDs).
-2.  **Audit Ledger**: An immutable, non-repudiable record of every system action, including actor ID and cryptographic checksums.
-3.  **AI Grounding Engine**: Integration with Gemini 3 Pro/Flash for automated literature reviews and search-grounded academic verification of economic theories.
+1.  **Identity Vault**: Data commits are gated by a Zero-Trust identity handshake.
+2.  **Audit Ledger**: Immutable record of shrinkflation audits.
+3.  **Academic Grounding**: All methodologies are cited against peer-reviewed literature (ECB Working Papers, NBER).
 
 ## 📊 Technical Stack
 

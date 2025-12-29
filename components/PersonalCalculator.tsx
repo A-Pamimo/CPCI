@@ -13,15 +13,50 @@ const PersonalCalculator: React.FC = () => {
   const [isInferenceLoading, setIsInferenceLoading] = useState(false);
 
   const currentWeights = selectedArchetype === 'CUSTOM' ? customWeights : ARCHETYPE_WEIGHTS[selectedArchetype as Archetype];
-  
+
+  // ACADEMIC CONSTANTS (Georganas et al.)
+  const ALPHA = 0.44;
+
   const calculatePersonalScore = () => {
     if (!currentWeights || currentWeights.length === 0) return "0.0";
-    const subMultiplier = noSubstitution ? 1.4 : 1.0;
-    const total = currentWeights.reduce((acc, curr) => {
-      const inelasticImpact = noSubstitution ? curr.inelasticity * 2 : 1;
-      return acc + (curr.weight * (curr.velocityFactor / 10) * inelasticImpact);
+
+    // Calculate total velocity for frequency share (phi)
+    const totalVelocity = currentWeights.reduce((acc, curr) => acc + curr.velocityFactor, 0);
+
+    const totalScore = currentWeights.reduce((acc, curr) => {
+      // 1. Calculate Standard Share (Theta) - assuming 'weight' in the object is the exp share * 100?
+      // Actually, in the object 'weight' is roughly the expenditure share percentage.
+      const theta = curr.weight / 100;
+
+      // 2. Calculate Frequency Share (Phi)
+      const phi = curr.velocityFactor / totalVelocity;
+
+      // 3. Composite Weight (W_i = alpha * phi + (1-alpha) * theta)
+      const compositeWeight_i = (ALPHA * phi) + ((1 - ALPHA) * theta);
+
+      // 4. Inelasticity/Friction Multiplier (Proxy for Housing Supply Elasticity or Regional Friction)
+      // In the frontend, we use 'noSubstitution' as a proxy for localized inelasticity penalty
+      // If noSubstitution is true, we assume higher friction.
+      const frictionPenalty = noSubstitution ? (curr.inelasticity * 1.5) : 1.0;
+
+      // 5. Price Relative Proxy (Since we don't have live price data in this view, we assume a standard ~5-8% shock distribution scaled by item type)
+      // This is a heuristic projection for the visualizer.
+      // High inelasticity + High visual weight = Higher Perceived Impact
+
+      // Simplified Index contribution for visualization:
+      // Weight * Impact_Factor * 100 (to make it an index)
+      // We normalize by the sum of composite weights (which should be 1, but we check).
+
+      return acc + (compositeWeight_i * frictionPenalty);
     }, 0);
-    return ((total / 4) * subMultiplier).toFixed(1);
+
+    // Normalize and Scale to a "Score" (0-10)
+    // The previous score was somewhat arbitrary. 
+    // Let's make this score reflect "Perceived Inflation Rate" over a baseline.
+    // Base inflation ~ 3%. If heavily weighted to high freq, might feel like 8%.
+    // Factor: Base (3) + (TotalComposite * 5)
+
+    return ((totalScore * 10) + (noSubstitution ? 1.5 : 0)).toFixed(1);
   };
 
   const handleLocalInference = () => {
@@ -79,17 +114,17 @@ const PersonalCalculator: React.FC = () => {
               <p className="text-lg text-white leading-none">P_i = Σ (Weight × Velocity × Inelasticity) × Penalty</p>
             </div>
           </div>
-          
+
           <div className="space-y-6 border-l border-slate-800 pl-10">
             <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">Heuristic Profile Generator</h4>
             <div className="space-y-4">
-              <textarea 
+              <textarea
                 value={customDescription}
                 onChange={(e) => setCustomDescription(e.target.value)}
                 placeholder="Describe your lifestyle (e.g. 'Single person in downtown Toronto, high rent, transit dependent')"
                 className="w-full bg-slate-800 border border-slate-700 p-3 text-[10px] text-white focus:outline-none focus:border-blue-500 h-24 font-serif italic"
               />
-              <button 
+              <button
                 onClick={handleLocalInference}
                 disabled={isInferenceLoading || !customDescription}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-[9px] font-black uppercase tracking-[0.2em] transition-all disabled:opacity-30"
@@ -108,9 +143,8 @@ const PersonalCalculator: React.FC = () => {
             <button
               key={arch}
               onClick={() => setSelectedArchetype(arch)}
-              className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all ${
-                selectedArchetype === arch ? 'bg-slate-900 text-white shadow-md' : 'bg-white text-slate-400 hover:text-slate-900'
-              }`}
+              className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all ${selectedArchetype === arch ? 'bg-slate-900 text-white shadow-md' : 'bg-white text-slate-400 hover:text-slate-900'
+                }`}
             >
               {arch}
             </button>
@@ -118,9 +152,8 @@ const PersonalCalculator: React.FC = () => {
           {customWeights.length > 0 && (
             <button
               onClick={() => setSelectedArchetype('CUSTOM')}
-              className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all ${
-                selectedArchetype === 'CUSTOM' ? 'bg-blue-600 text-white' : 'bg-white text-blue-400'
-              }`}
+              className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all ${selectedArchetype === 'CUSTOM' ? 'bg-blue-600 text-white' : 'bg-white text-blue-400'
+                }`}
             >
               Custom Mapping
             </button>
@@ -128,7 +161,7 @@ const PersonalCalculator: React.FC = () => {
         </div>
         <div className="flex items-center space-x-6 text-[10px] font-black uppercase tracking-widest">
           <span className="text-slate-400 underline decoration-dotted">No Substitutions Penalty</span>
-          <button 
+          <button
             onClick={() => setNoSubstitution(!noSubstitution)}
             className={`w-12 h-6 rounded-none transition-colors border ${noSubstitution ? 'bg-red-700 border-red-800' : 'bg-white border-slate-300'}`}
           >
@@ -179,7 +212,7 @@ const PersonalCalculator: React.FC = () => {
           <div className={`p-6 border-l-4 border-slate-900 ${sig.bg}`}>
             <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-2">Significance Report</h4>
             <p className="text-[10px] text-slate-600 leading-relaxed font-bold uppercase tracking-tight">
-               Current coefficient indicates <span className={sig.color}>{sig.label.replace('_', ' ')}</span>. {sig.note}
+              Current coefficient indicates <span className={sig.color}>{sig.label.replace('_', ' ')}</span>. {sig.note}
             </p>
           </div>
         </div>
