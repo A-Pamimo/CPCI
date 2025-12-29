@@ -57,7 +57,10 @@ const Dashboard: React.FC = () => {
   };
 
   const simData = getSimulatedData();
+  // Safe access to gap
   const currentGap = simData.length > 0 ? (simData[simData.length - 1].cpci_simulated - simData[simData.length - 1].cpi_official).toFixed(2) : "0.00";
+  const lastCpci = simData.length > 0 ? simData[simData.length - 1].cpci_simulated.toFixed(1) : "---";
+  const lastCpi = simData.length > 0 ? simData[simData.length - 1].cpi_official.toFixed(1) : "---";
 
   if (isLoading) return <div className="p-12 font-serif text-slate-500 italic">Retrieving Archives...</div>;
 
@@ -173,11 +176,11 @@ const Dashboard: React.FC = () => {
           {/* Margin Notes (Annotations) */}
           <div className="absolute top-4 right-4 text-right pointer-events-none">
             <div className="text-[#E3120B] text-xs font-bold font-sans">Perceived Index</div>
-            <div className="text-[#E3120B] text-2xl font-black tabular-nums">{simData.length > 0 ? simData[simData.length - 1].cpci_simulated.toFixed(1) : ''}</div>
+            <div className="text-[#E3120B] text-2xl font-black tabular-nums">{lastCpci}</div>
           </div>
           <div className="absolute bottom-16 right-4 text-right pointer-events-none">
             <div className="text-slate-500 text-xs font-bold font-sans">Official CPI</div>
-            <div className="text-slate-900 text-2xl font-black tabular-nums">{simData.length > 0 ? simData[simData.length - 1].cpi_official.toFixed(1) : ''}</div>
+            <div className="text-slate-900 text-2xl font-black tabular-nums">{lastCpi}</div>
           </div>
         </div>
         <div className="mt-4 flex justify-between items-start text-xs text-slate-500 font-sans">
