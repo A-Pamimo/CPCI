@@ -82,54 +82,60 @@ const PersonalCalculator: React.FC = () => {
   const sig = getSig(score);
 
   return (
-    <div className="max-w-6xl mx-auto space-y-10 pb-20">
-      {/* Contextual Briefing */}
-      <section className="bg-white border-l-4 border-slate-900 p-8 shadow-sm space-y-4">
-        <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Contextual Briefing: Impact Assessment</h2>
-        <p className="text-sm font-serif italic text-slate-700 leading-relaxed">
-          Standard inflation measures assume everyone spends money the same way. The <strong>Impact Assessment Modeler</strong> allows you to see how your specific lifestyle is being "attacked" by rising costs. It uses two key metrics:
+    <div className="max-w-6xl mx-auto space-y-10 pb-20 font-inter text-slate-800">
+      {/* Contextual Briefing -> Micro-Economic Impact Statement */}
+      <section className="bg-white border-t-4 border-slate-900 p-8 shadow-sm space-y-4">
+        <h2 className="text-xs font-black text-slate-900 uppercase tracking-[0.3em] font-serif">Micro-Economic Simulation</h2>
+        <p className="text-sm font-serif text-slate-700 leading-relaxed">
+          Standard inflation measures assume a "Representative Agent" with a fixed basket. This module calculates the <strong>Idiosyncratic Friction Rate</strong> for specific demographic archetypes. By weighting high-frequency non-durable goods ($\phi$) and inelastic housing costs ($M_{loc}$), we model the "Perceived Inflation" actually experienced by these agents.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-          <div className="p-4 bg-slate-50 border border-slate-100">
-            <h4 className="text-[10px] font-black text-slate-900 uppercase mb-1">Velocity (V)</h4>
-            <p className="text-[10px] text-slate-500 leading-relaxed font-medium uppercase">How often you are forced to spend money. Frequent costs (like gas or milk) feel "heavier" and cause more financial stress than one-time costs (like a TV).</p>
+          <div className="p-4 bg-[#F9F7F5] border border-slate-200">
+            <h4 className="text-[10px] font-black text-slate-900 uppercase mb-1">Frequency Bias ($\phi$)</h4>
+            <p className="text-[10px] text-slate-500 leading-relaxed font-sans">
+              The velocity of purchase events. High-frequency transactions (fuel, groceries) disproportionately weight inflation perception ($\alpha \approx 0.44$).
+            </p>
           </div>
-          <div className="p-4 bg-slate-50 border border-slate-100">
-            <h4 className="text-[10px] font-black text-slate-900 uppercase mb-1">Inelasticity (E)</h4>
-            <p className="text-[10px] text-slate-500 leading-relaxed font-medium uppercase">Your "lack of choice." High inelasticity means you are trapped in that cost (like rent) and cannot easily switch to a cheaper alternative when prices rise.</p>
+          <div className="p-4 bg-[#F9F7F5] border border-slate-200">
+            <h4 className="text-[10px] font-black text-slate-900 uppercase mb-1">Regional Friction ($M_{loc}$)</h4>
+            <p className="text-[10px] text-slate-500 leading-relaxed font-sans">
+              Substitution elasticity constraints. Agents in inelastic housing markets face higher effective inflation due to inability to substitute.
+            </p>
           </div>
         </div>
       </section>
 
       {/* Methodology Introduction Blurb */}
-      <section className="bg-slate-900 text-white p-10 border border-slate-800">
+      <section className="bg-slate-900 text-white p-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 border-2 border-slate-700 flex items-center justify-center font-bold text-xs">i</div>
-              <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400">The Friction Formula</h3>
+              <div className="w-8 h-8 flex items-center justify-center font-serif font-bold text-xl italic text-slate-500">f(x)</div>
+              <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400">The CPCI Governing Equation</h3>
             </div>
-            <div className="p-6 bg-black/40 border border-slate-800 font-mono text-[10px] space-y-3">
-              <p className="text-blue-400"># Governing Equation for Perceived Impact (P_i):</p>
-              <p className="text-lg text-white leading-none">P_i = Σ (Weight × Velocity × Inelasticity) × Penalty</p>
+            <div className="p-6 border-l-2 border-[#E3120B] font-mono text-xs space-y-3">
+              <p className="text-slate-400"># Part V: Synthesis Model</p>
+              <p className="text-lg text-white leading-none tracking-tight">
+                CPCI_t = Σ [ (α·φ + (1-α)·θ) × (1 + λ) ] × M_loc
+              </p>
             </div>
           </div>
 
           <div className="space-y-6 border-l border-slate-800 pl-10">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">Heuristic Profile Generator</h4>
+            <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">Heuristic Inference Engine</h4>
             <div className="space-y-4">
               <textarea
                 value={customDescription}
                 onChange={(e) => setCustomDescription(e.target.value)}
-                placeholder="Describe your lifestyle (e.g. 'Single person in downtown Toronto, high rent, transit dependent')"
-                className="w-full bg-slate-800 border border-slate-700 p-3 text-[10px] text-white focus:outline-none focus:border-blue-500 h-24 font-serif italic"
+                placeholder="Describe agent profile (e.g. 'Student in Vancouver, high tuition, transit dependent')"
+                className="w-full bg-slate-800 border-none p-4 text-[11px] text-white focus:ring-1 focus:ring-[#E3120B] h-24 font-serif italic"
               />
               <button
                 onClick={handleLocalInference}
                 disabled={isInferenceLoading || !customDescription}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-[9px] font-black uppercase tracking-[0.2em] transition-all disabled:opacity-30"
+                className="w-full bg-[#E3120B] hover:bg-red-700 text-white py-3 text-[9px] font-black uppercase tracking-[0.2em] transition-all disabled:opacity-30"
               >
-                {isInferenceLoading ? 'Running Heuristics...' : 'Generate Heuristic Profile'}
+                {isInferenceLoading ? 'Processing Heuristics...' : 'Generate Parameters'}
               </button>
             </div>
           </div>
@@ -138,12 +144,12 @@ const PersonalCalculator: React.FC = () => {
 
       {/* Archetype Selector & Results */}
       <div className="bg-white border border-slate-200 p-8 flex flex-col md:flex-row justify-between items-center gap-8">
-        <div className="flex flex-wrap gap-1">
+        <div className="flex flex-wrap gap-2">
           {Object.values(Archetype).map((arch) => (
             <button
               key={arch}
               onClick={() => setSelectedArchetype(arch)}
-              className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all ${selectedArchetype === arch ? 'bg-slate-900 text-white shadow-md' : 'bg-white text-slate-400 hover:text-slate-900'
+              className={`px-4 py-2 text-[9px] font-bold uppercase tracking-widest transition-all border ${selectedArchetype === arch ? 'bg-slate-900 text-white border-slate-900' : 'bg-transparent text-slate-400 border-slate-200 hover:border-slate-400'
                 }`}
             >
               {arch}
@@ -152,20 +158,20 @@ const PersonalCalculator: React.FC = () => {
           {customWeights.length > 0 && (
             <button
               onClick={() => setSelectedArchetype('CUSTOM')}
-              className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all ${selectedArchetype === 'CUSTOM' ? 'bg-blue-600 text-white' : 'bg-white text-blue-400'
+              className={`px-4 py-2 text-[9px] font-bold uppercase tracking-widest transition-all border ${selectedArchetype === 'CUSTOM' ? 'bg-[#E3120B] text-white border-[#E3120B]' : 'bg-transparent text-slate-400 border-slate-200'
                 }`}
             >
-              Custom Mapping
+              Custom Agent
             </button>
           )}
         </div>
         <div className="flex items-center space-x-6 text-[10px] font-black uppercase tracking-widest">
-          <span className="text-slate-400 underline decoration-dotted">No Substitutions Penalty</span>
+          <span className="text-slate-400 decoration-dotted underline">Inelasticity Penalty ($\lambda$)</span>
           <button
             onClick={() => setNoSubstitution(!noSubstitution)}
-            className={`w-12 h-6 rounded-none transition-colors border ${noSubstitution ? 'bg-red-700 border-red-800' : 'bg-white border-slate-300'}`}
+            className={`w-12 h-6 rounded-full transition-colors ${noSubstitution ? 'bg-slate-900' : 'bg-slate-200'}`}
           >
-            <div className={`w-3 h-3 bg-white mx-1 transition-all ${noSubstitution ? 'translate-x-6' : 'translate-x-0'}`}></div>
+            <div className={`w-4 h-4 bg-white rounded-full mx-1 mt-1 transition-all ${noSubstitution ? 'translate-x-6' : 'translate-x-0'}`}></div>
           </button>
         </div>
       </div>
@@ -174,15 +180,15 @@ const PersonalCalculator: React.FC = () => {
         <div className="lg:col-span-8 bg-white border border-slate-200 p-10">
           <div className="flex justify-between items-start mb-12">
             <div>
-              <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">
+              <h3 className="text-lg font-serif font-black text-slate-900">
                 {selectedArchetype === 'CUSTOM' ? 'Heuristic Profile Mapping' : `${selectedArchetype} Model Projection`}
               </h3>
-              <p className="text-[10px] text-slate-400 font-bold mt-2 uppercase tracking-widest">Consumer Friction / Elasticity Audit</p>
+              <p className="text-[10px] text-[#E3120B] font-bold mt-1 uppercase tracking-widest">Calculated Friction Coefficient</p>
             </div>
             <div className="text-right">
               <span className={`text-[9px] ${sig.color} uppercase font-black tracking-widest block mb-2`}>{sig.label.replace('_', ' ')}</span>
-              <p className={`text-5xl font-black ${sig.color} tabular-nums leading-none`}>{calculatePersonalScore()}</p>
-              <span className="text-[9px] text-slate-400 font-bold uppercase tracking-tighter mt-2 block">Impact Coefficient</span>
+              <p className={`text-6xl font-serif font-black ${sig.color} tabular-nums leading-none`}>{calculatePersonalScore()}</p>
+              <span className="text-[9px] text-slate-400 font-bold uppercase tracking-tighter mt-2 block">Index Value</span>
             </div>
           </div>
 
@@ -191,10 +197,10 @@ const PersonalCalculator: React.FC = () => {
               <BarChart data={currentWeights} layout="vertical" margin={{ left: 10 }}>
                 <CartesianGrid strokeDasharray="1 1" horizontal={false} stroke="#f1f5f9" />
                 <XAxis type="number" hide />
-                <YAxis dataKey="category" type="category" width={120} tick={{ fontSize: 9, fontWeight: 800, textTransform: 'uppercase', fill: '#475569' }} axisLine={false} tickLine={false} />
-                <Bar dataKey="weight" radius={0} barSize={12}>
+                <YAxis dataKey="category" type="category" width={120} tick={{ fontSize: 9, fontFamily: 'serif', fontWeight: 'bold', fill: '#475569' }} axisLine={false} tickLine={false} />
+                <Bar dataKey="weight" radius={0} barSize={8}>
                   {currentWeights && currentWeights.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.inelasticity > 0.8 ? '#b91c1c' : selectedArchetype === 'CUSTOM' ? '#2563eb' : '#0f172a'} />
+                    <Cell key={`cell-${index}`} fill={entry.inelasticity > 0.8 ? '#0f172a' : '#94a3b8'} />
                   ))}
                 </Bar>
               </BarChart>
@@ -202,14 +208,14 @@ const PersonalCalculator: React.FC = () => {
           </div>
         </div>
 
-        <div className="lg:col-span-4 bg-slate-50 border border-slate-200 p-10 space-y-8">
+        <div className="lg:col-span-4 bg-[#F9F7F5] border border-slate-200 p-10 space-y-8">
           <div>
             <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Elasticity Analysis</h4>
-            <p className="text-[11px] text-slate-600 leading-relaxed font-serif italic">
+            <p className="text-[12px] text-slate-800 leading-relaxed font-serif">
               "This profile exhibits high Price Inelasticity in housing and energy. Traditional CPI adjustments are statistically insignificant for this demographic, resulting in a Felt Inflation that far outpaces reported baselines."
             </p>
           </div>
-          <div className={`p-6 border-l-4 border-slate-900 ${sig.bg}`}>
+          <div className={`p-6 border-l-2 border-slate-900 ${sig.bg}`}>
             <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-2">Significance Report</h4>
             <p className="text-[10px] text-slate-600 leading-relaxed font-bold uppercase tracking-tight">
               Current coefficient indicates <span className={sig.color}>{sig.label.replace('_', ' ')}</span>. {sig.note}
