@@ -96,3 +96,6 @@ class AcademicCPCI:
             "HIGH_ELASTICITY_CITY": 0.95, # e.g. Houston (Sprawl allowed)
             "LOW_ELASTICITY_CITY": 1.35,  # e.g. Vancouver/NYC (Zoning constrained)
         }
+
+# Alias for backward compatibility with main.py
+CPCIEngine = AcademicCPCI

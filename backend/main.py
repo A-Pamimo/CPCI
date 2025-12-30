@@ -2,6 +2,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List, Optional
+import pandas as pd
 from .econometrics import CPCIEngine
 
 app = FastAPI(
@@ -22,39 +23,59 @@ class CategoryWeight(BaseModel):
 
 class InflationPoint(BaseModel):
     category: str
-    price_relative: float # P_t / P_t-1 (e.g., 1.05 for 5% inflation)
+    price_current: float  # Current price
+    price_ref: float      # Reference/previous price
     is_shrinkflation: bool = False
-    shrink_penalty: Optional[float] = 0.0
 
 class CPCIRequest(BaseModel):
-    profile_weights: List[CategoryWeight]
-    inflation_data: List[InflationPoint]
+    basket: List[dict]  # Combined weight + price data
     regional_elasticity: float = 1.0
 
 # --- Endpoints ---
 
 @app.get("/")
 def health_check():
-    return {"status": "active", "engine": "CPCI v3.1 (Behavioral)", "alpha": engine.ALPHA}
+    return {
+        "status": "active", 
+        "engine": "CPCI v3.1 (Academic Synthesis)", 
+        "alpha": engine.alpha,
+        "lambda_shrink": engine.LAMBDA_ROJAS
+    }
 
 @app.post("/calculate")
 def calculate_cpci(request: CPCIRequest):
     """
     Calculate the Perceived Cost Index based on the specific profile and market data.
+    
+    Expected basket format (list of dicts):
+    [
+        {
+            "category": "Groceries",
+            "price_current": 105.0,
+            "price_ref": 100.0,
+            "weight_expenditure": 0.15,
+            "frequency_annual": 52,
+            "is_shrinkflation": false
+        },
+        ...
+    ]
     """
     try:
-        # Convert Pydantic models to dicts for the engine
-        weights_dict = [w.dict() for w in request.profile_weights]
-        inflation_dict = [i.dict() for i in request.inflation_data]
+        # Convert request to DataFrame for engine
+        df = pd.DataFrame(request.basket)
         
-        result = engine.calculate_cpci(
-            profile_weights=weights_dict,
-            inflation_data=inflation_dict,
+        result = engine.compute_index(
+            basket=df,
             regional_elasticity=request.regional_elasticity
         )
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/elasticity-map")
+def get_elasticity_map():
+    """Returns housing supply elasticity multipliers by city type."""
+    return CPCIEngine.glaeser_elasticity_map()
 
 if __name__ == "__main__":
     import uvicorn
